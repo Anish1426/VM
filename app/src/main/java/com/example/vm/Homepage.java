@@ -81,10 +81,11 @@ public class Homepage extends AppCompatActivity {
                         String contact = cusContact.getText().toString();
 
 
-                        AddCustomers addCustomers = new AddCustomers(gst,name,address,state,contact);
+
                         addCustomerReference.addListenerForSingleValueEvent(new ValueEventListener() {
                             @Override
                             public void onDataChange(@NonNull DataSnapshot snapshot) {
+                                AddCustomers addCustomers = new AddCustomers(gst,name,address,state,contact);
                                 long count = snapshot.getChildrenCount();
                                 String id = String.valueOf(count+1);
                                 addCustomerReference.child(id).setValue(addCustomers)
