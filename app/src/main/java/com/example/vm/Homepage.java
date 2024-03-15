@@ -31,7 +31,7 @@ public class Homepage extends AppCompatActivity {
 
     EditText tpcode,tpname,tpvechile,tpcontact,pcode,pname,phsn,prate,pcgst,psgst
             ,sell_gst,sell_name,sell_address,sell_state,sell_contact
-            ,cusGst,cysName,cusAddress,cusState,cusContact
+            ,cusGst,cusName,cusAddress,cusState,cusContact
             ,sales_no,party_name,pur_from_date,pur_to_date;
 
     DatabaseReference reference,productReference,addSellerReference,addCustomerReference;
@@ -53,12 +53,38 @@ public class Homepage extends AppCompatActivity {
             public void onClick(View v) {
                 AlertDialog.Builder builder = new AlertDialog.Builder(Homepage.this);
                 View view = getLayoutInflater().inflate(R.layout.add_customer,null);
+
+
                 cusGst= view.findViewById(R.id.cusGst);
-                cysName=view.findViewById(R.id.cusName);
+                cusName=view.findViewById(R.id.cusName);
                 cusAddress=view.findViewById(R.id.cusAddress);
                 cusState=view.findViewById(R.id.cusState);
                 cusContact=view.findViewById(R.id.cusContact);
+                cusCancel = view.findViewById(R.id.cusCancel);
+                cusSubmit=view.findViewById(R.id.cusSubmit);
 
+                cusCancel.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        dialog.dismiss();
+                    }
+                });
+
+                cusSubmit.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        String gst = cusGst.getText().toString();
+                        String name = cusName.getText().toString();
+                        String address = cusAddress.getText().toString();
+                        String state = cusAddress.getText().toString();
+                        String contact = cusContact.getText().toString();
+
+                    }
+                });
+
+                builder.setView(view);
+                dialog = builder.create();
+                dialog.show();
 
             }
         });
@@ -219,7 +245,7 @@ public class Homepage extends AppCompatActivity {
 
             }
         });
-        seller.setOnClickListener(new View.OnClickListener() {
+        addSeller.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 AlertDialog.Builder builder = new AlertDialog.Builder(Homepage.this);
