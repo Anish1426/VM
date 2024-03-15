@@ -25,7 +25,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 public class Homepage extends AppCompatActivity {
-    Button transport,product,pcancel,psubmit,seller,sell_cancel,sell_submit,addSeller,addCustomer,pur_down,purchase,
+    Button transport,product,pcancel,psubmit,sell_cancel,sell_submit,addSeller,addCustomer,pur_down,purchase,
             cusCancel,cusSubmit;
     Dialog dialog;
 
