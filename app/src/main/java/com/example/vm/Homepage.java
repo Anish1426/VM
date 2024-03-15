@@ -32,8 +32,7 @@ public class Homepage extends AppCompatActivity {
 
     EditText tpcode,tpname,tpvechile,tpcontact,pcode,pname,phsn,prate,pcgst,psgst
             ,sell_gst,sell_name,sell_address,sell_state,sell_contact
-            ,cusGst,cusName,cusAddress,cusState,cusContact
-            ,sales_no,party_name,pur_from_date,pur_to_date;
+            ,cusGst,cusName,cusAddress,cusState,cusContact;
 
     DatabaseReference reference,productReference,addSellerReference,addCustomerReference;
 
