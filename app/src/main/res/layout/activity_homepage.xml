@@ -1,0 +1,281 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".Homepage"
+    android:orientation="vertical"
+    android:background="@drawable/login">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:fontFamily="serif"
+        android:outlineProvider="paddedBounds"
+        android:text="Vetrimurugan and co"
+        android:textColor="#ffffff"
+        android:textIsSelectable="false"
+        android:textSize="30dp"
+        android:textStyle="bold"
+        android:layout_marginTop="25dp"/>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:fontFamily="serif"
+        android:outlineProvider="paddedBounds"
+        android:text="HomePage"
+        android:textColor="#ffffff"
+        android:textIsSelectable="false"
+        android:textSize="30dp"
+        android:textStyle="bold"
+        android:layout_marginTop="25dp"/>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="15dp"
+        android:layout_marginTop="12dp"
+        >
+        <HorizontalScrollView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:background="@drawable/round"
+            android:gravity="center"
+            android:orientation="horizontal"
+            android:padding="15dp">
+
+            <Button
+                android:id="@+id/transport"
+                android:layout_width="119dp"
+                android:layout_height="wrap_content"
+                android:text="Enter Transport"
+                />
+
+            <Button
+                android:layout_width="109dp"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="13dp"
+                android:text="Enter Accounts" />
+
+            <Button
+                android:layout_width="109dp"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="13dp"
+                android:text="Add Products"
+                android:id="@+id/addpro"/>
+
+            <Button
+                android:layout_width="112dp"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="13dp"
+                android:text="Enter Payments" />
+
+
+        </LinearLayout>
+        </HorizontalScrollView>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_marginLeft="15dp"
+            android:background="#171522"
+            android:text="   General Details Entry   "
+            android:textColor="#ffffff"
+            android:textSize="17sp" />
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="15dp"
+        >
+
+        <HorizontalScrollView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:background="@drawable/round"
+                android:gravity="center"
+                android:orientation="horizontal"
+                android:padding="15dp">
+
+                <Button
+                    android:id="@+id/addSeller"
+                    android:layout_width="109dp"
+                    android:layout_height="wrap_content"
+                    android:text="Add Our Seller" />
+
+                <Button
+                    android:id="@+id/purchase_entry"
+                    android:layout_width="109dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="13dp"
+                    android:text="Enter Purchase" />
+
+                <Button
+                    android:id="@+id/pur_down"
+                    android:layout_width="112dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="13dp"
+                    android:text="Download Duplicate" />
+
+                <Button
+                    android:layout_width="112dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="13dp"
+                    android:text="Pending Bills" />
+
+
+            </LinearLayout>
+        </HorizontalScrollView>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_marginLeft="15dp"
+            android:background="#171522"
+            android:text="   Purchase   "
+            android:textColor="#ffffff"
+            android:textSize="17sp" />
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="15dp"
+        >
+
+        <HorizontalScrollView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:background="@drawable/round"
+                android:gravity="center"
+                android:orientation="horizontal"
+                android:padding="15dp">
+
+                <Button
+                    android:id="@+id/addCustomer"
+                    android:layout_width="115dp"
+                    android:layout_height="wrap_content"
+                    android:text="Add Our Customer"
+                    />
+
+                <Button
+                    android:layout_width="115dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="13dp"
+                    android:text="Generate Bill"
+                     />
+
+                <Button
+                    android:layout_width="115dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="13dp"
+                    android:text="Download Bill" />
+
+                <Button
+                    android:layout_width="112dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="13dp"
+                    android:text="Pending Bill" />
+
+
+            </LinearLayout>
+        </HorizontalScrollView>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_marginLeft="15dp"
+            android:background="#1A1523"
+            android:text="   Sales   "
+            android:textColor="#ffffff"
+            android:textSize="17sp" />
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="15dp"
+        >
+
+        <HorizontalScrollView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:background="@drawable/round"
+                android:gravity="center"
+                android:orientation="horizontal"
+                android:padding="15dp">
+
+                <Button
+                    android:layout_width="115dp"
+                    android:layout_height="wrap_content"
+                    android:text="Purchase Report"
+                    />
+
+                <Button
+                    android:layout_width="115dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="13dp"
+                    android:text="Sales Report"
+                    />
+
+                <Button
+                    android:layout_width="115dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="13dp"
+                    android:text="Purchase Payments" />
+
+                <Button
+                    android:layout_width="112dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="13dp"
+                    android:text="Sales Payments" />
+
+                <Button
+                    android:layout_width="112dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="13dp"
+                    android:text="Ledger Report" />
+
+
+            </LinearLayout>
+        </HorizontalScrollView>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_marginLeft="15dp"
+            android:background="#1A1523"
+            android:text="   Reports   "
+            android:textColor="#ffffff"
+            android:textSize="17sp" />
+
+    </RelativeLayout>
+
+</LinearLayout>

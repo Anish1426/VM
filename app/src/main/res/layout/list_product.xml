@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <TableLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+    <TableRow>
+
+
+        <TextView
+            android:id="@+id/sno"
+            android:layout_width="60dp"
+            android:layout_height="wrap_content"
+            android:background="@drawable/border"
+            android:padding="10dp"
+            android:text="SNO"
+            android:textAlignment="center"
+            android:textSize="20dp"
+            android:textStyle="bold |italic" />
+
+        <TextView
+            android:id="@+id/name"
+            android:layout_width="192dp"
+            android:layout_height="wrap_content"
+            android:background="@drawable/border"
+            android:padding="10dp"
+            android:text="PRODUCT NAME"
+            android:textAlignment="center"
+            android:textSize="20dp"
+            android:textStyle="bold |italic" />
+
+        <TextView
+            android:id="@+id/hsn"
+            android:layout_width="115dp"
+            android:layout_height="wrap_content"
+            android:background="@drawable/border"
+            android:padding="10dp"
+            android:text="HSN"
+            android:textAlignment="center"
+            android:textSize="20dp"
+            android:textStyle="bold |italic" />
+
+
+        <TextView
+            android:id="@+id/quantity"
+            android:layout_width="127dp"
+            android:layout_height="wrap_content"
+            android:background="@drawable/border"
+            android:padding="10dp"
+            android:text="QUANTITY"
+            android:textAlignment="center"
+            android:textSize="20dp"
+            android:textStyle="bold |italic" />
+
+        <TextView
+            android:id="@+id/rate"
+            android:layout_width="76dp"
+            android:layout_height="wrap_content"
+            android:background="@drawable/border"
+            android:padding="10dp"
+            android:text="RATE"
+            android:textAlignment="center"
+            android:textSize="20dp"
+            android:textStyle="bold |italic" />
+
+        <TextView
+            android:id="@+id/sgst"
+            android:layout_width="76dp"
+            android:layout_height="wrap_content"
+            android:background="@drawable/border"
+            android:padding="10dp"
+            android:text="SGST"
+            android:textAlignment="center"
+            android:textSize="20dp"
+            android:textStyle="bold |italic" />
+
+        <TextView
+            android:id="@+id/cgst"
+            android:layout_width="76dp"
+            android:layout_height="wrap_content"
+            android:background="@drawable/border"
+            android:padding="10dp"
+            android:text="CGST"
+            android:textAlignment="center"
+            android:textSize="20dp"
+            android:textStyle="bold |italic" />
+
+        <TextView
+            android:id="@+id/amount"
+            android:layout_width="145dp"
+            android:layout_height="wrap_content"
+            android:background="@drawable/border"
+            android:padding="10dp"
+            android:text="AMOUNT"
+            android:textAlignment="center"
+            android:textSize="20dp"
+            android:textStyle="bold |italic" />
+
+    </TableRow>
+    </TableLayout>
+
+</LinearLayout>

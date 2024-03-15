@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "859055729961",
+    "project_id": "vmandco-6526d",
+    "storage_bucket": "vmandco-6526d.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:859055729961:android:2a94d36e3d03a0f68bdb38",
+        "android_client_info": {
+          "package_name": "com.example.vm"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDWFnLtr1b9ZEpA-9ereZ99jC4HoI7NYcE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
