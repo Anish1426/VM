@@ -12,6 +12,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.vm.Classes.AddCustomers;
 import com.example.vm.Classes.ProductClass;
 import com.example.vm.Classes.PurchaseClass;
 import com.example.vm.Classes.TransportClass;
@@ -81,7 +82,18 @@ public class Homepage extends AppCompatActivity {
                         String contact = cusContact.getText().toString();
 
 
+                        AddCustomers addCustomers = new AddCustomers(gst,name,address,state,contact);
+                        addCustomerReference.addListenerForSingleValueEvent(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(@NonNull DataSnapshot snapshot) {
 
+                            }
+
+                            @Override
+                            public void onCancelled(@NonNull DatabaseError error) {
+
+                            }
+                        });
                     }
                 });
 
