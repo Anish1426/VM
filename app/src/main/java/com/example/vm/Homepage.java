@@ -86,7 +86,21 @@ public class Homepage extends AppCompatActivity {
                         addCustomerReference.addListenerForSingleValueEvent(new ValueEventListener() {
                             @Override
                             public void onDataChange(@NonNull DataSnapshot snapshot) {
-
+                                long count = snapshot.getChildrenCount();
+                                String id = String.valueOf(count+1);
+                                addCustomerReference.child(id).setValue(addCustomers)
+                                        .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                            @Override
+                                            public void onSuccess(Void unused) {
+                                                toastMessage("customer Added");
+                                            }
+                                        })
+                                        .addOnFailureListener(new OnFailureListener() {
+                                            @Override
+                                            public void onFailure(@NonNull Exception e) {
+                                                toastMessage("customer Adding Failed");
+                                            }
+                                        });
                             }
 
                             @Override
@@ -359,6 +373,10 @@ public class Homepage extends AppCompatActivity {
             }
         });
 
+    }
+
+    public void toastMessage(String message){
+        Toast.makeText(this,message,Toast.LENGTH_SHORT).show();
     }
 
 
