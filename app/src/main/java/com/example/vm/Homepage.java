@@ -54,6 +54,7 @@ public class Homepage extends AppCompatActivity {
                 AlertDialog.Builder builder = new AlertDialog.Builder(Homepage.this);
                 View view = getLayoutInflater().inflate(R.layout.add_customer,null);
 
+                addCustomerReference = FirebaseDatabase.getInstance().getReference().child("addCustomer");
 
                 cusGst= view.findViewById(R.id.cusGst);
                 cusName=view.findViewById(R.id.cusName);
@@ -78,6 +79,8 @@ public class Homepage extends AppCompatActivity {
                         String address = cusAddress.getText().toString();
                         String state = cusAddress.getText().toString();
                         String contact = cusContact.getText().toString();
+
+
 
                     }
                 });
