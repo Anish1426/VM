@@ -90,7 +90,7 @@
             android:textSize="22dp" />
 
         <Spinner
-            android:id="@+id/spinner"
+            android:id="@+id/productName"
             android:layout_width="match_parent"
             android:layout_height="48dp"
             android:layout_marginLeft="12dp"
@@ -105,7 +105,7 @@
         android:paddingLeft="5dp">
 
         <TextView
-            android:id="@+id/quantity"
+            android:id="@+id/hsn"
             android:layout_width="117dp"
             android:layout_height="50dp"
             android:layout_gravity="center"
@@ -118,7 +118,7 @@
 
         <EditText
             android:inputType="numberDecimal"
-            android:id="@+id/quan"
+            android:id="@+id/quantity"
             android:gravity="center"
             android:layout_width="132dp"
             android:layout_height="51dp"
@@ -324,7 +324,7 @@
                     </TableRow>
 
                     <ListView
-                        android:id="@+id/purchaseList"
+                        android:id="@+id/salesList"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent" />
                 </TableLayout>

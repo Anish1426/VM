@@ -19,6 +19,7 @@ public class activity_sales_entry extends AppCompatActivity {
     }
 
     public void clear(View view) {
+
     }
 
     public void addRow(View view) {
