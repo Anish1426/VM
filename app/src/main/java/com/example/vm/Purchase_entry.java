@@ -266,8 +266,6 @@ public class Purchase_entry extends AppCompatActivity implements AdapterView.OnI
             gstAmount.setText(gstTotal);
             fullAmount.setText(amount);
             productAdapter.notifyDataSetChanged();
-            count++;
-
         }
 
 
