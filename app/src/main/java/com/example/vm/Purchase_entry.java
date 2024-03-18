@@ -251,7 +251,6 @@ public class Purchase_entry extends AppCompatActivity implements AdapterView.OnI
             productClassList.add(productClass);
 
             for (ProductClass pClass : productClassList) {
-                String name = pClass.getpName();
                 double initAmount = Double.parseDouble(productClass.getQuantity()) * Double.parseDouble(productClass.getpRate());
                 double initGst = initAmount*((Double.parseDouble(productClass.getpSgst()) + Double.parseDouble(productClass.getpCgst()))/100);
                 double val = Double.parseDouble(productClass.getpAmount());
