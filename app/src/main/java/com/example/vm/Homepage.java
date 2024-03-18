@@ -1,11 +1,14 @@
 package com.example.vm;
 
+import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -23,6 +26,8 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+
+import java.util.Calendar;
 
 public class Homepage extends AppCompatActivity {
     Button transport,product,pcancel,psubmit,sell_cancel,sell_submit,addSeller,addCustomer,pur_down,purchase,
@@ -383,5 +388,66 @@ public class Homepage extends AppCompatActivity {
     public void generateBill(View view) {
         Intent intent = new Intent(Homepage.this,activity_sales_entry.class);
         startActivity(intent);
+    }
+
+    public void salesDownload(View view) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(Homepage.this);
+
+        View view1 = getLayoutInflater().inflate(R.layout.sales_bill_download,null);
+        TextView from_date = view1.findViewById(R.id.from_date);
+        TextView to_date = view1.findViewById(R.id.to_date);
+        from_date.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                    // Get current date to initialize the DatePickerDialog
+                    Calendar calendar = Calendar.getInstance();
+                    int year = calendar.get(Calendar.YEAR);
+                    int month = calendar.get(Calendar.MONTH);
+                    int dayOfMonth = calendar.get(Calendar.DAY_OF_MONTH);
+
+                    // Create a new instance of DatePickerDialog
+                    DatePickerDialog datePickerDialog = new DatePickerDialog(Homepage.this,
+                            new DatePickerDialog.OnDateSetListener() {
+                                @Override
+                                public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
+                                    // Do something with the selected date
+                                    String selectedDate = dayOfMonth + "/" + (monthOfYear + 1) + "/" + year;
+                                    from_date.setText(selectedDate);
+                                }
+                            }, year, month, dayOfMonth);
+
+                    // Show the DatePickerDialog
+                    datePickerDialog.show();
+                }
+            });
+
+        to_date.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Calendar calendar = Calendar.getInstance();
+                int year = calendar.get(Calendar.YEAR);
+                int month = calendar.get(Calendar.MONTH);
+                int dayOfMonth = calendar.get(Calendar.DAY_OF_MONTH);
+
+                // Create a new instance of DatePickerDialog
+                DatePickerDialog datePickerDialog = new DatePickerDialog(Homepage.this,
+                        new DatePickerDialog.OnDateSetListener() {
+                            @Override
+                            public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
+                                // Do something with the selected date
+                                String selectedDate = dayOfMonth + "/" + (monthOfYear + 1) + "/" + year;
+                                to_date.setText(selectedDate);
+                            }
+                        }, year, month, dayOfMonth);
+
+                // Show the DatePickerDialog
+                datePickerDialog.show();
+            }
+        });
+
+
+        builder.setView(view1);
+        dialog = builder.create();
+        dialog.show();
     }
 }
