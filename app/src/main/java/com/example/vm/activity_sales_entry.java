@@ -5,6 +5,7 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -46,6 +47,14 @@ public class activity_sales_entry extends AppCompatActivity {
     }
 
     public void addRow(View view) {
+        addTableData();
+    }
 
+    private void addTableData() {
+        toastMessage("Working");
+    }
+
+    private  void  toastMessage(String message){
+        Toast.makeText(this,message,Toast.LENGTH_SHORT).show();
     }
 }

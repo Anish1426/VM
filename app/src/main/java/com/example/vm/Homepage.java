@@ -380,4 +380,8 @@ public class Homepage extends AppCompatActivity {
     }
 
 
+    public void generateBill(View view) {
+        Intent intent = new Intent(Homepage.this,activity_sales_entry.class);
+        startActivity(intent);
+    }
 }
