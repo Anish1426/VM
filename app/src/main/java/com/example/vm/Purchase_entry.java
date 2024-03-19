@@ -58,9 +58,11 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 public class Purchase_entry extends AppCompatActivity {
@@ -90,7 +92,7 @@ public class Purchase_entry extends AppCompatActivity {
     List<String> product;
 
     TextView quantity;
-    EditText sgst1,cgst1,quan,rate,billNo;
+    EditText sgst1,cgst1,quan,rate,billNo,billDate;
 
     ListView productList;
 
@@ -112,6 +114,13 @@ public class Purchase_entry extends AppCompatActivity {
         quan = findViewById(R.id.quan);
         rate = findViewById(R.id.rate);
         clear = findViewById(R.id.clear);
+        billDate = findViewById(R.id.billDate);
+
+        SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
+        Date date1 = new Date();
+        String Date = dateFormat.format(date1);
+
+        billDate.setText(Date);
         generateBill = findViewById(R.id.generateBill);
         totalAmount = findViewById(R.id.initialAmount);
         gstAmount = findViewById(R.id.gstAmount);
@@ -196,7 +205,6 @@ public class Purchase_entry extends AppCompatActivity {
                     billNoChange();
                     purchaseBillSave();
                     createPdf();
-
                 }
             }
         });
@@ -231,7 +239,7 @@ public class Purchase_entry extends AppCompatActivity {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 long count = snapshot.getChildrenCount();
-                String billNumber = String.valueOf(count);
+                String billNumber = String.valueOf(count+1);
                 billNo.setText(billNumber);
             }
 
@@ -342,7 +350,7 @@ public class Purchase_entry extends AppCompatActivity {
 
             quan.setText("");
             rate.setText("");
-            productClassList.remove(productClass);
+
         }
 
 
@@ -351,11 +359,26 @@ public class Purchase_entry extends AppCompatActivity {
     }
 
     private void createPdf() {
+        String Bill = billNo.getText().toString();
 
         try {
 
-            String pdfPath = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS).toString();
-            File file = new File(pdfPath, "sample.pdf");
+            String downloadsPath = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS).toString();
+            String vetrimuruganPath = downloadsPath + "/Vetrimurugan";
+
+            // Create directory if it doesn't exist
+            File vetrimuruganDir = new File(vetrimuruganPath);
+            if (!vetrimuruganDir.exists()) {
+                if (vetrimuruganDir.mkdirs()) {
+                    System.out.println("Vetrimurugan directory created successfully.");
+                    toastMessage("Vetrimurugan directory created successfully.");
+                } else {
+                    System.err.println("Failed to create Vetrimurugan directory.");
+                    return;
+                }
+            }
+
+            File file = new File(vetrimuruganPath, Bill+".pdf");
 
             Document document = new Document();
             PdfWriter.getInstance(document, new FileOutputStream(file));
@@ -431,13 +454,16 @@ public class Purchase_entry extends AppCompatActivity {
             e1.setBorder(Rectangle.NO_BORDER);
             PdfPCell e2 = new PdfPCell(new Phrase(""));
             e2.setBorder(Rectangle.NO_BORDER);
-            PdfPCell invoiceNum = new PdfPCell(new Phrase("Invoice No: "+1+"/23-24",FontFactory.getFont(FontFactory.TIMES_BOLD,12,BaseColor.BLACK)));
+
+            String Dates = String.valueOf(billDate.getText().toString());
+            PdfPCell invoiceNum = new PdfPCell(new Phrase("Invoice No: "+Bill +"/23-24",FontFactory.getFont(FontFactory.TIMES_BOLD,12,BaseColor.BLACK)));
             invoiceNum.setHorizontalAlignment(Element.ALIGN_RIGHT);
             invoiceNum.setBorder(Rectangle.NO_BORDER);
 
 
 
-            PdfPCell d = new PdfPCell(new Phrase("Date: "+"fdate"));
+
+            PdfPCell d = new PdfPCell(new Phrase("Date: "+Dates));
             d.setBorder(Rectangle.NO_BORDER);
             d.setHorizontalAlignment(Element.ALIGN_RIGHT);
 
