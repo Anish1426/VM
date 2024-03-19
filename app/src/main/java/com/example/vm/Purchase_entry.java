@@ -33,6 +33,8 @@ import android.widget.Toast;
 
 import com.example.vm.Adapters.ProductAdapter;
 import com.example.vm.Classes.ProductClass;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -61,7 +63,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Purchase_entry extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
+public class Purchase_entry extends AppCompatActivity {
     sqlconnection db ;
     Spinner cpy_name;
     TableLayout tableLayout;
@@ -81,18 +83,19 @@ public class Purchase_entry extends AppCompatActivity implements AdapterView.OnI
     String[] items = {"--Select--", "Item 2", "Item 3", "Item 4"};
     public int rowCounter = 1;
 
-    DatabaseReference customerReference ,productReference;
+    DatabaseReference customerReference ,productReference,purchaseBill;
     ArrayList<String> labels;
     ArrayAdapter<String> dataAdapter;
 
     List<String> product;
 
     TextView quantity;
-    EditText sgst1,cgst1,quan,rate;
+    EditText sgst1,cgst1,quan,rate,billNo;
 
     ListView productList;
 
     TextView totalAmount,gstAmount,fullAmount;
+    long count=1;
 
     private static final int REQUEST_WRITE_EXTERNAL_STORAGE = 1;
     @Override
@@ -103,6 +106,7 @@ public class Purchase_entry extends AppCompatActivity implements AdapterView.OnI
         cpy_name = findViewById(R.id.cpy_name);
         sgst1 = findViewById(R.id.sgst);
         cgst1 = findViewById(R.id.cgst);
+        billNo = findViewById(R.id.billNo);
         gst = findViewById(R.id.gst);
         quantity = findViewById(R.id.quantity);
         quan = findViewById(R.id.quan);
@@ -125,6 +129,7 @@ public class Purchase_entry extends AppCompatActivity implements AdapterView.OnI
 
         customerReference = FirebaseDatabase.getInstance().getReference().child("addSeller");
         productReference = FirebaseDatabase.getInstance().getReference().child("product");
+        purchaseBill = FirebaseDatabase.getInstance().getReference().child("purchaseBill");
 
         cpy_name.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
@@ -169,7 +174,8 @@ public class Purchase_entry extends AppCompatActivity implements AdapterView.OnI
                clear.setOnClickListener(new View.OnClickListener() {
                    @Override
                    public void onClick(View v) {
-
+                       billNo.setText(String.valueOf(count));
+                       count++;
                    }
                });
 
@@ -187,8 +193,10 @@ public class Purchase_entry extends AppCompatActivity implements AdapterView.OnI
                     // Request the permission
                     ActivityCompat.requestPermissions(Purchase_entry.this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, REQUEST_WRITE_EXTERNAL_STORAGE);
                 } else {
-                    // Permission already granted, call your createPdf() method here
+                    billNoChange();
+                    purchaseBillSave();
                     createPdf();
+
                 }
             }
         });
@@ -208,6 +216,7 @@ public class Purchase_entry extends AppCompatActivity implements AdapterView.OnI
                 cgst1.setEnabled(false);
             }
         });
+        billNoChange();
         loadCompanyData();
         loadProductData();
         productDetails();
@@ -217,6 +226,70 @@ public class Purchase_entry extends AppCompatActivity implements AdapterView.OnI
 
     }
 
+    private void billNoChange() {
+        purchaseBill.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                long count = snapshot.getChildrenCount();
+                String billNumber = String.valueOf(count);
+                billNo.setText(billNumber);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+    }
+
+    private void purchaseBillSave() {
+        try {
+
+            purchaseBill.addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot snapshot) {
+                    String id = billNo.getText().toString();
+                    for (int i = 0; i < productClassList.size(); i++) {
+                        productClass = productClassList.get(i);
+
+                        String sno = productClass.getpCode();
+                        String pName = productClass.getpName();
+                        String pHsn = productClass.getpHsn();
+                        String pQuantity = productClass.getQuantity();
+                        String pRate = productClass.getpRate();
+                        String pcGst = productClass.getpCgst();
+                        String pSgst = productClass.getpSgst();
+                        String pAmount = productClass.getpAmount();
+
+                        ProductClass productClass1 = new ProductClass(sno, pName, pHsn, pQuantity, pRate, pcGst, pSgst, pAmount);
+
+                        String productKey = purchaseBill.child(id).push().getKey();
+
+                        purchaseBill.child(id).child(productKey).setValue(productClass1)
+                                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                    @Override
+                                    public void onSuccess(Void unused) {
+                                        toastMessage("Bill Saved Successfully");
+                                    }
+                                })
+                                .addOnFailureListener(new OnFailureListener() {
+                                    @Override
+                                    public void onFailure(@NonNull Exception e) {
+                                        toastMessage("Bill Saving Failed");
+                                    }
+                                });
+                    }
+                }
+
+                @Override
+                public void onCancelled(@NonNull DatabaseError error) {
+
+                }
+            });
+        } catch (Exception e) {
+            toastMessage(e.getMessage());
+        }
+    }
 
 
     private void addNewRow() {
@@ -266,6 +339,10 @@ public class Purchase_entry extends AppCompatActivity implements AdapterView.OnI
             gstAmount.setText(gstTotal);
             fullAmount.setText(amount);
             productAdapter.notifyDataSetChanged();
+
+            quan.setText("");
+            rate.setText("");
+            productClassList.remove(productClass);
         }
 
 
@@ -687,25 +764,7 @@ public class Purchase_entry extends AppCompatActivity implements AdapterView.OnI
 
 
     }
-    @Override
-    public void onItemSelected(AdapterView<?> parent, View view, int position,
-                               long id) {
-        // On selecting a spinner item
-        String label = parent.getItemAtPosition(position).toString();
 
-        // Showing selected spinner item
-        Toast.makeText(parent.getContext(), "You selected: " + label,
-                Toast.LENGTH_LONG).show();
-
-    }
-
-
-
-    @Override
-    public void onNothingSelected(AdapterView<?> arg0) {
-        // TODO Auto-generated method stub
-
-    }
     public  void toastMessage(String message){
         Toast.makeText(this,message,Toast.LENGTH_SHORT).show();
     }

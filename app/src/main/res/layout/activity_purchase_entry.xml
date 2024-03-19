@@ -35,10 +35,12 @@
             android:layout_marginRight="30dp"/>
 
         <EditText
+            android:id="@+id/billNo"
             android:layout_width="80dp"
             android:layout_height="48dp"
             android:background="@drawable/round"
             android:hint="Bill No"
+            android:textAlignment="center"
             android:textColor="#ffffff"
             android:textSize="20dp"
             android:textColorHint="#ffffff"
