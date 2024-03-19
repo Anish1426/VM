@@ -364,14 +364,15 @@ public class Purchase_entry extends AppCompatActivity {
         try {
 
             String downloadsPath = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS).toString();
-            String vetrimuruganPath = downloadsPath + "/Vetrimurugan";
+            String vetrimuruganPath = downloadsPath + "/Vetrimurugan"+ "/Purchase_bill";
 
             // Create directory if it doesn't exist
             File vetrimuruganDir = new File(vetrimuruganPath);
-            if (!vetrimuruganDir.exists()) {
+            if (!vetrimuruganDir.exists() ) {
                 if (vetrimuruganDir.mkdirs()) {
                     System.out.println("Vetrimurugan directory created successfully.");
                     toastMessage("Vetrimurugan directory created successfully.");
+                    toastMessage("Purchase Bill directory created successfully.");
                 } else {
                     System.err.println("Failed to create Vetrimurugan directory.");
                     return;

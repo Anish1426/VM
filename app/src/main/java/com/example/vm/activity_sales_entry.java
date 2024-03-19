@@ -35,7 +35,7 @@ import java.util.List;
 public class activity_sales_entry extends AppCompatActivity {
 
     Spinner to,productName;
-    EditText quantity,rate,sgstRate,cgstRate;
+    EditText quantity,rate,sgstRate,cgstRate,billNo;
     TextView hsnCode,intiAmount,gstAmount,fullAmount;
     CheckBox gst;
     ListView salesList;
@@ -45,7 +45,7 @@ public class activity_sales_entry extends AppCompatActivity {
 
     List<String> customerList,productList;
     String productHsn,productSgst,productCgst,grandTotal,total,amount,gstTotal;
-    DatabaseReference productReference,customerReference;
+    DatabaseReference productReference,customerReference,salesBillReference;
 
 
     @Override
@@ -61,6 +61,7 @@ public class activity_sales_entry extends AppCompatActivity {
         gstAmount= findViewById(R.id.gstAmount);
         fullAmount = findViewById(R.id.finalAmount);
 
+        billNo = findViewById(R.id.billNo);
         quantity = findViewById(R.id.quantity);
         rate= findViewById(R.id.rate);
         sgstRate = findViewById(R.id.sgst);
