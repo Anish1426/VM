@@ -1,9 +1,13 @@
 package com.example.vm;
 
+
+import android.Manifest;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ListView;
@@ -11,24 +15,22 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.activity.EdgeToEdge;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.graphics.Insets;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowInsetsCompat;
-import androidx.recyclerview.widget.ListAdapter;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 
-import com.example.vm.Adapters.ProductAdapter;
-import com.example.vm.Classes.ProductClass;
+import com.example.vm.Adapters.PurchaseAdapter;
+import com.example.vm.Adapters.SalesAdapter;
 import com.example.vm.Classes.SalesClass;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -40,18 +42,27 @@ public class activity_sales_entry extends AppCompatActivity {
     CheckBox gst;
     ListView salesList;
     private SalesClass salesClass;
-    private ProductAdapter productAdapter;
-    List<ProductClass> salesClassList;
+    private SalesAdapter salesAdapter;
+    List<SalesClass> salesClassList;
 
     List<String> customerList,productList;
     String productHsn,productSgst,productCgst,grandTotal,total,amount,gstTotal;
     DatabaseReference productReference,customerReference,salesBillReference;
+
+    Button generateBill;
+
+    private static final int REQUEST_WRITE_EXTERNAL_STORAGE = 1;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sales_entry);
+
+        productReference = FirebaseDatabase.getInstance().getReference().child("product");
+        customerReference = FirebaseDatabase.getInstance().getReference().child("addSeller");
+        salesBillReference = FirebaseDatabase.getInstance().getReference().child("salesBill");
+
 
         to = findViewById(R.id.cpy_name);
         productName = findViewById(R.id.productName);
@@ -68,17 +79,73 @@ public class activity_sales_entry extends AppCompatActivity {
         cgstRate=findViewById(R.id.cgst);
 
         salesList = findViewById(R.id.salesList);
-
         salesClassList = new ArrayList<>();
-        productAdapter = new ProductAdapter(this,salesClassList);
-        salesList.setAdapter(productAdapter);
+        salesAdapter = new SalesAdapter(this,salesClassList);
+        salesList.setAdapter(salesAdapter);
 
+        generateBill = findViewById(R.id.generateBill);
 
-        productReference = FirebaseDatabase.getInstance().getReference().child("product");
-        customerReference = FirebaseDatabase.getInstance().getReference().child("addSeller");
+        generateBill.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (ContextCompat.checkSelfPermission(activity_sales_entry.this, android.Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+                    // Request the permission
+                    ActivityCompat.requestPermissions(activity_sales_entry.this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, REQUEST_WRITE_EXTERNAL_STORAGE);
+                } else {
+                    billNoChange();
+                    salesBillSave();
+                    createPdf();
+                }
+            }
+        });
 
+        billNoChange();
         loadSpinnerData();
         loadHsnCodeGst();
+
+
+    }
+
+    private void createPdf() {
+    }
+
+    private void salesBillSave() {
+        try {
+            String id = billNo.getText().toString();
+            for (int i = 0; i < salesClassList.size(); i++) {
+                salesClass = salesClassList.get(i);
+
+                String sno = salesClass.getpCode();
+                String pName = salesClass.getpName();
+                String pHsn = salesClass.getpHsn();
+                String pQuantity = salesClass.getQuantity();
+                String pRate = salesClass.getpRate();
+                String pcGst = salesClass.getpCgst();
+                String pSgst = salesClass.getpSgst();
+                String pAmount = salesClass.getpAmount();
+
+                salesClass = new SalesClass(sno, pName, pHsn, pQuantity, pRate, pcGst, pSgst, pAmount);
+
+                String productKey = salesBillReference.child(id).push().getKey();
+
+                salesBillReference.child(id).child(productKey).setValue(salesClass)
+                        .addOnSuccessListener(new OnSuccessListener<Void>() {
+                            @Override
+                            public void onSuccess(Void unused) {
+                                toastMessage("Bill Saved Successfully");
+                            }
+                        })
+                        .addOnFailureListener(new OnFailureListener() {
+                            @Override
+                            public void onFailure(@NonNull Exception e) {
+                                toastMessage("Bill Saving Failed");
+                            }
+                        });
+            }
+        }
+        catch (Exception e){
+            toastMessage(e.getMessage());
+        }
     }
 
     private void loadHsnCodeGst() {
@@ -192,14 +259,14 @@ public class activity_sales_entry extends AppCompatActivity {
             grandTotal = String.valueOf(finalAmount);
             double initTotal=0,Total=0,TotalGst=0;
 
-            ProductClass productClass = new ProductClass(sno,pName,pHsn,quan,rate1,cg,sg,grandTotal);
-            salesClassList.add(productClass);
+            salesClass = new SalesClass(sno,pName,pHsn,quan,rate1,cg,sg,grandTotal);
+            salesClassList.add(salesClass);
 
-            for (ProductClass pClass : salesClassList) {
-                String name = pClass.getpName();
-                double initAmount = Double.parseDouble(productClass.getQuantity()) * Double.parseDouble(productClass.getpRate());
-                double initGst = initAmount*((Double.parseDouble(productClass.getpSgst()) + Double.parseDouble(productClass.getpCgst()))/100);
-                double val = Double.parseDouble(productClass.getpAmount());
+            for (SalesClass sClass : salesClassList) {
+                String name = sClass.getpName();
+                double initAmount = Double.parseDouble(salesClass.getQuantity()) * Double.parseDouble(salesClass.getpRate());
+                double initGst = initAmount*((Double.parseDouble(salesClass.getpSgst()) + Double.parseDouble(salesClass.getpCgst()))/100);
+                double val = Double.parseDouble(salesClass.getpAmount());
                 initTotal = initTotal+initAmount;
                 TotalGst = TotalGst + initGst;
                 Total = Total+val;
@@ -211,12 +278,32 @@ public class activity_sales_entry extends AppCompatActivity {
             intiAmount.setText(total);
             gstAmount.setText(gstTotal);
             fullAmount.setText(amount);
-            productAdapter.notifyDataSetChanged();
+            salesAdapter.notifyDataSetChanged();
 
         }
     }
 
+    private void billNoChange() {
+        salesBillReference.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                long count = snapshot.getChildrenCount();
+                String billNumber = String.valueOf(count+1);
+                billNo.setText(billNumber);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+    }
+
     private  void  toastMessage(String message){
         Toast.makeText(this,message,Toast.LENGTH_SHORT).show();
+    }
+
+    public void billSearch(View view) {
+        toastMessage("Sample");
     }
 }

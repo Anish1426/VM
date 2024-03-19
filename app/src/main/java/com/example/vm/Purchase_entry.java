@@ -4,21 +4,13 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
-import androidx.core.content.FileProvider;
 
 import android.Manifest;
-import android.content.ActivityNotFoundException;
-import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
-import android.graphics.Color;
-import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.util.Log;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -27,11 +19,10 @@ import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.TableLayout;
-import android.widget.TableRow;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.vm.Adapters.ProductAdapter;
+import com.example.vm.Adapters.PurchaseAdapter;
 import com.example.vm.Classes.ProductClass;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -48,7 +39,6 @@ import com.itextpdf.text.FontFactory;
 import com.itextpdf.text.Paragraph;
 import com.itextpdf.text.Phrase;
 import com.itextpdf.text.Rectangle;
-import com.itextpdf.text.pdf.PdfDocument;
 import com.itextpdf.text.pdf.PdfPCell;
 import com.itextpdf.text.pdf.PdfPTable;
 import com.itextpdf.text.pdf.PdfWriter;
@@ -56,11 +46,7 @@ import com.itextpdf.text.pdf.draw.LineSeparator;
 
 import java.io.File;
 import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.OutputStream;
 import java.text.SimpleDateFormat;
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -76,7 +62,7 @@ public class Purchase_entry extends AppCompatActivity {
     CheckBox gst;
     List<ProductClass> productClassList;
     ProductClass productClass;
-    private ProductAdapter productAdapter;
+    private PurchaseAdapter purchaseAdapter;
 
     String total ,gstTotal,grandTotal, amount;
 
@@ -127,8 +113,8 @@ public class Purchase_entry extends AppCompatActivity {
         fullAmount = findViewById(R.id.finalAmount);
         productList = findViewById(R.id.purchaseList);
         productClassList = new ArrayList<>();
-        productAdapter =new ProductAdapter(Purchase_entry.this,productClassList);
-        productList.setAdapter(productAdapter);
+        purchaseAdapter =new PurchaseAdapter(Purchase_entry.this,productClassList);
+        productList.setAdapter(purchaseAdapter);
 
         addRowButton = findViewById(R.id.add_row);
         labels = new ArrayList<>();
@@ -346,7 +332,7 @@ public class Purchase_entry extends AppCompatActivity {
             totalAmount.setText(total);
             gstAmount.setText(gstTotal);
             fullAmount.setText(amount);
-            productAdapter.notifyDataSetChanged();
+            purchaseAdapter.notifyDataSetChanged();
 
             quan.setText("");
             rate.setText("");
@@ -797,4 +783,7 @@ public class Purchase_entry extends AppCompatActivity {
     }
 
 
+    public void billSearch(View view) {
+        toastMessage("Sample");
+    }
 }

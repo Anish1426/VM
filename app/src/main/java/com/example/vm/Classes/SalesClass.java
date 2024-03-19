@@ -1,59 +1,90 @@
 package com.example.vm.Classes;
 
 public class SalesClass {
-        String gstNo;
-        String partyName;
-        String address;
-        String state;
+    String pCode;
+    String pName;
+    String pHsn;
+    String quantity;
 
-        public String getGstNo() {
-            return gstNo;
-        }
+    String pRate;
+    String pCgst;
+    String pSgst;
 
-        public void setGstNo(String gstNo) {
-            this.gstNo = gstNo;
-        }
+    String pAmount;
 
-        public String getPartyName() {
-            return partyName;
-        }
 
-        public void setPartyName(String partyName) {
-            this.partyName = partyName;
-        }
-
-        public String getAddress() {
-            return address;
-        }
-
-        public void setAddress(String address) {
-            this.address = address;
-        }
-
-        public String getState() {
-            return state;
-        }
-
-        public void setState(String state) {
-            this.state = state;
-        }
-
-        public String getContact() {
-            return contact;
-        }
-
-        public void setContact(String contact) {
-            this.contact = contact;
-        }
-
-        String contact;
-
-        public SalesClass(String gstNo, String partyName, String address, String state, String contact) {
-            this.gstNo = gstNo;
-            this.partyName = partyName;
-            this.address = address;
-            this.state = state;
-            this.contact = contact;
-        }
+    public SalesClass(String pCode, String pName, String pHsn, String quantity, String pRate, String pCgst, String pSgst, String pAmount) {
+        this.pCode = pCode;
+        this.pName = pName;
+        this.pHsn = pHsn;
+        this.quantity = quantity;
+        this.pRate = pRate;
+        this.pCgst = pCgst;
+        this.pSgst = pSgst;
+        this.pAmount = pAmount;
     }
 
+    public String getpCode() {
+        return pCode;
+    }
+
+    public void setpCode(String pCode) {
+        this.pCode = pCode;
+    }
+
+    public String getpName() {
+        return pName;
+    }
+
+    public void setpName(String pName) {
+        this.pName = pName;
+    }
+
+    public String getpHsn() {
+        return pHsn;
+    }
+
+    public void setpHsn(String pHsn) {
+        this.pHsn = pHsn;
+    }
+
+    public String getQuantity() {
+        return quantity;
+    }
+
+    public void setQuantity(String quantity) {
+        this.quantity = quantity;
+    }
+
+    public String getpRate() {
+        return pRate;
+    }
+
+    public void setpRate(String pRate) {
+        this.pRate = pRate;
+    }
+
+    public String getpCgst() {
+        return pCgst;
+    }
+
+    public void setpCgst(String pCgst) {
+        this.pCgst = pCgst;
+    }
+
+    public String getpSgst() {
+        return pSgst;
+    }
+
+    public void setpSgst(String pSgst) {
+        this.pSgst = pSgst;
+    }
+
+    public String getpAmount() {
+        return pAmount;
+    }
+
+    public void setpAmount(String pAmount) {
+        this.pAmount = pAmount;
+    }
+}

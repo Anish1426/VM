@@ -58,6 +58,14 @@
             android:textColor="#ffffff"
             android:textColorHint="#ffffff"
             android:textSize="20dp" />
+        <Button
+            android:onClick="billSearch"
+            android:layout_width="33dp"
+            android:layout_height="33dp"
+            android:layout_x="148dp"
+            android:layout_y="10dp"
+            android:background="@drawable/search" />
+
 
         <EditText
             android:id="@+id/billDate"
