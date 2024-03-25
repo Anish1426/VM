@@ -6,12 +6,16 @@ public class SalesClass {
     String pHsn;
     String quantity;
 
+    String productKey;
+
     String pRate;
     String pCgst;
     String pSgst;
 
     String pAmount;
 
+    public SalesClass() {
+    }
 
     public SalesClass(String pCode, String pName, String pHsn, String quantity, String pRate, String pCgst, String pSgst, String pAmount) {
         this.pCode = pCode;
@@ -86,5 +90,13 @@ public class SalesClass {
 
     public void setpAmount(String pAmount) {
         this.pAmount = pAmount;
+    }
+
+    public void setProductKey(String productKey) {
+        this.productKey = productKey;
+    }
+
+    public String getProductKey() {
+        return productKey;
     }
 }

@@ -16,6 +16,9 @@
         android:theme="@style/Theme.VM"
         tools:targetApi="31">
         <activity
+            android:name=".SalesReport"
+            android:exported="false" />
+        <activity
             android:name=".activity_sales_entry"
             android:exported="false" />
         <activity

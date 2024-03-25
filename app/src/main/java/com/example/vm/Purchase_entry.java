@@ -764,7 +764,6 @@ public class Purchase_entry extends AppCompatActivity {
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 for(DataSnapshot products:snapshot.getChildren()){
                     product.add(products.child("pName").getValue().toString());
-
                 }
                 adapter.notifyDataSetChanged();
             }
