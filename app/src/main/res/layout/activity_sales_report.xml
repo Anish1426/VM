@@ -1,0 +1,189 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".SalesReport"
+    android:orientation="vertical"
+    android:background="@drawable/login">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:fontFamily="serif"
+        android:outlineProvider="paddedBounds"
+        android:text="Sales Report Details"
+        android:textColor="#ffffff"
+        android:textSize="30dp"
+        android:textStyle="bold"
+        android:layout_marginTop="25dp"/>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        >
+
+        <HorizontalScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <TableLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <TableRow>
+
+
+                    <TextView
+
+                        android:layout_width="173dp"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/border"
+                        android:padding="10dp"
+                        android:text="INVOICE DATE"
+                        android:textAlignment="center"
+                        android:textSize="20dp"
+                        android:textStyle="bold |italic" />
+
+                    <TextView
+
+                        android:layout_width="192dp"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/border"
+                        android:padding="10dp"
+                        android:text="INVOICE NUMBER"
+                        android:textAlignment="center"
+                        android:textSize="20dp"
+                        android:textStyle="bold |italic" />
+
+                    <TextView
+
+                        android:layout_width="176dp"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/border"
+                        android:padding="10dp"
+                        android:text="PARTY NAME"
+                        android:textAlignment="center"
+                        android:textSize="20dp"
+                        android:textStyle="bold |italic" />
+
+
+                    <TextView
+
+                        android:layout_width="204dp"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/border"
+                        android:padding="10dp"
+                        android:text="CUSTOMER GST"
+                        android:textAlignment="center"
+                        android:textSize="20dp"
+                        android:textStyle="bold |italic" />
+
+                    <TextView
+
+                        android:layout_width="169dp"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/border"
+                        android:padding="10dp"
+                        android:text="PRODUCT NAME"
+                        android:textAlignment="center"
+                        android:textSize="20dp"
+                        android:textStyle="bold |italic" />
+
+                    <TextView
+
+                        android:layout_width="126dp"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/border"
+                        android:padding="10dp"
+                        android:text="HSN CODE"
+                        android:textAlignment="center"
+                        android:textSize="20dp"
+                        android:textStyle="bold |italic" />
+
+                    <TextView
+
+                        android:layout_width="144dp"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/border"
+                        android:padding="10dp"
+                        android:text="QUANTITY"
+                        android:textAlignment="center"
+                        android:textSize="20dp"
+                        android:textStyle="bold |italic" />
+
+                    <TextView
+                        android:layout_width="145dp"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/border"
+                        android:padding="10dp"
+                        android:text="RATE"
+                        android:textAlignment="center"
+                        android:textSize="20dp"
+                        android:textStyle="bold |italic" />
+                    <TextView
+                        android:layout_width="145dp"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/border"
+                        android:padding="10dp"
+                        android:text="SGST %"
+                        android:textAlignment="center"
+                        android:textSize="20dp"
+                        android:textStyle="bold |italic" />
+                    <TextView
+                        android:layout_width="145dp"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/border"
+                        android:padding="10dp"
+                        android:text="CGST %"
+                        android:textAlignment="center"
+                        android:textSize="20dp"
+                        android:textStyle="bold |italic" />
+                    <TextView
+                        android:layout_width="145dp"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/border"
+                        android:padding="10dp"
+                        android:text="SGST"
+                        android:textAlignment="center"
+                        android:textSize="20dp"
+                        android:textStyle="bold |italic" />
+                    <TextView
+                        android:layout_width="145dp"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/border"
+                        android:padding="10dp"
+                        android:text="CGST"
+                        android:textAlignment="center"
+                        android:textSize="20dp"
+                        android:textStyle="bold |italic" />
+                    <TextView
+                        android:layout_width="145dp"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/border"
+                        android:padding="10dp"
+                        android:text="AMOUNT"
+                        android:textAlignment="center"
+                        android:textSize="20dp"
+                        android:textStyle="bold |italic" />
+
+                </TableRow>
+
+                <ListView
+                    android:id="@+id/salesList"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent" />
+
+
+            </TableLayout>
+
+        </HorizontalScrollView>
+    </RelativeLayout>
+
+
+
+</LinearLayout>

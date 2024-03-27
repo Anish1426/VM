@@ -1,11 +1,9 @@
 package com.example.vm.Adapters;
 
 import android.app.Activity;
-import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
 
@@ -13,17 +11,16 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import com.example.vm.Classes.ProductClass;
-import com.example.vm.Purchase_entry;
 import com.example.vm.R;
 
 import java.util.List;
 
-public class ProductAdapter extends BaseAdapter {
+public class PurchaseAdapter extends BaseAdapter {
 
     private Activity mContext;
     List<ProductClass> productClassList;
 
-    public ProductAdapter(Activity mContext, List<ProductClass> productClassList) {
+    public PurchaseAdapter(Activity mContext, List<ProductClass> productClassList) {
         this.mContext = mContext;
         this.productClassList = productClassList;
     }

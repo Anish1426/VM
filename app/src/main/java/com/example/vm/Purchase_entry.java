@@ -4,21 +4,13 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
-import androidx.core.content.FileProvider;
 
 import android.Manifest;
-import android.content.ActivityNotFoundException;
-import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
-import android.graphics.Color;
-import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.util.Log;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -27,12 +19,13 @@ import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.TableLayout;
-import android.widget.TableRow;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.vm.Adapters.ProductAdapter;
+import com.example.vm.Adapters.PurchaseAdapter;
 import com.example.vm.Classes.ProductClass;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -46,7 +39,6 @@ import com.itextpdf.text.FontFactory;
 import com.itextpdf.text.Paragraph;
 import com.itextpdf.text.Phrase;
 import com.itextpdf.text.Rectangle;
-import com.itextpdf.text.pdf.PdfDocument;
 import com.itextpdf.text.pdf.PdfPCell;
 import com.itextpdf.text.pdf.PdfPTable;
 import com.itextpdf.text.pdf.PdfWriter;
@@ -54,14 +46,12 @@ import com.itextpdf.text.pdf.draw.LineSeparator;
 
 import java.io.File;
 import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.OutputStream;
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
-public class Purchase_entry extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
+public class Purchase_entry extends AppCompatActivity {
     sqlconnection db ;
     Spinner cpy_name;
     TableLayout tableLayout;
@@ -72,7 +62,7 @@ public class Purchase_entry extends AppCompatActivity implements AdapterView.OnI
     CheckBox gst;
     List<ProductClass> productClassList;
     ProductClass productClass;
-    private ProductAdapter productAdapter;
+    private PurchaseAdapter purchaseAdapter;
 
     String total ,gstTotal,grandTotal, amount;
 
@@ -81,18 +71,19 @@ public class Purchase_entry extends AppCompatActivity implements AdapterView.OnI
     String[] items = {"--Select--", "Item 2", "Item 3", "Item 4"};
     public int rowCounter = 1;
 
-    DatabaseReference customerReference ,productReference;
+    DatabaseReference customerReference ,productReference,purchaseBill;
     ArrayList<String> labels;
     ArrayAdapter<String> dataAdapter;
 
     List<String> product;
 
     TextView quantity;
-    EditText sgst1,cgst1,quan,rate;
+    EditText sgst1,cgst1,quan,rate,billNo,billDate;
 
     ListView productList;
 
     TextView totalAmount,gstAmount,fullAmount;
+    long count=1;
 
     private static final int REQUEST_WRITE_EXTERNAL_STORAGE = 1;
     @Override
@@ -103,19 +94,27 @@ public class Purchase_entry extends AppCompatActivity implements AdapterView.OnI
         cpy_name = findViewById(R.id.cpy_name);
         sgst1 = findViewById(R.id.sgst);
         cgst1 = findViewById(R.id.cgst);
+        billNo = findViewById(R.id.billNo);
         gst = findViewById(R.id.gst);
         quantity = findViewById(R.id.quantity);
         quan = findViewById(R.id.quan);
         rate = findViewById(R.id.rate);
         clear = findViewById(R.id.clear);
+        billDate = findViewById(R.id.billDate);
+
+        SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
+        Date date1 = new Date();
+        String Date = dateFormat.format(date1);
+
+        billDate.setText(Date);
         generateBill = findViewById(R.id.generateBill);
         totalAmount = findViewById(R.id.initialAmount);
         gstAmount = findViewById(R.id.gstAmount);
         fullAmount = findViewById(R.id.finalAmount);
         productList = findViewById(R.id.purchaseList);
         productClassList = new ArrayList<>();
-        productAdapter =new ProductAdapter(Purchase_entry.this,productClassList);
-        productList.setAdapter(productAdapter);
+        purchaseAdapter =new PurchaseAdapter(Purchase_entry.this,productClassList);
+        productList.setAdapter(purchaseAdapter);
 
         addRowButton = findViewById(R.id.add_row);
         labels = new ArrayList<>();
@@ -125,6 +124,7 @@ public class Purchase_entry extends AppCompatActivity implements AdapterView.OnI
 
         customerReference = FirebaseDatabase.getInstance().getReference().child("addSeller");
         productReference = FirebaseDatabase.getInstance().getReference().child("product");
+        purchaseBill = FirebaseDatabase.getInstance().getReference().child("purchaseBill");
 
         cpy_name.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
@@ -169,7 +169,8 @@ public class Purchase_entry extends AppCompatActivity implements AdapterView.OnI
                clear.setOnClickListener(new View.OnClickListener() {
                    @Override
                    public void onClick(View v) {
-
+                       billNo.setText(String.valueOf(count));
+                       count++;
                    }
                });
 
@@ -187,7 +188,8 @@ public class Purchase_entry extends AppCompatActivity implements AdapterView.OnI
                     // Request the permission
                     ActivityCompat.requestPermissions(Purchase_entry.this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, REQUEST_WRITE_EXTERNAL_STORAGE);
                 } else {
-                    // Permission already granted, call your createPdf() method here
+                    billNoChange();
+                    purchaseBillSave();
                     createPdf();
                 }
             }
@@ -208,6 +210,7 @@ public class Purchase_entry extends AppCompatActivity implements AdapterView.OnI
                 cgst1.setEnabled(false);
             }
         });
+        billNoChange();
         loadCompanyData();
         loadProductData();
         productDetails();
@@ -217,6 +220,70 @@ public class Purchase_entry extends AppCompatActivity implements AdapterView.OnI
 
     }
 
+    private void billNoChange() {
+        purchaseBill.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                long count = snapshot.getChildrenCount();
+                String billNumber = String.valueOf(count+1);
+                billNo.setText(billNumber);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+    }
+
+    private void purchaseBillSave() {
+        try {
+
+            purchaseBill.addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot snapshot) {
+                    String id = billNo.getText().toString();
+                    for (int i = 0; i < productClassList.size(); i++) {
+                        productClass = productClassList.get(i);
+
+                        String sno = productClass.getpCode();
+                        String pName = productClass.getpName();
+                        String pHsn = productClass.getpHsn();
+                        String pQuantity = productClass.getQuantity();
+                        String pRate = productClass.getpRate();
+                        String pcGst = productClass.getpCgst();
+                        String pSgst = productClass.getpSgst();
+                        String pAmount = productClass.getpAmount();
+
+                        ProductClass productClass1 = new ProductClass(sno, pName, pHsn, pQuantity, pRate, pcGst, pSgst, pAmount);
+
+                        String productKey = purchaseBill.child(id).push().getKey();
+
+                        purchaseBill.child(id).child(productKey).setValue(productClass1)
+                                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                    @Override
+                                    public void onSuccess(Void unused) {
+                                        toastMessage("Bill Saved Successfully");
+                                    }
+                                })
+                                .addOnFailureListener(new OnFailureListener() {
+                                    @Override
+                                    public void onFailure(@NonNull Exception e) {
+                                        toastMessage("Bill Saving Failed");
+                                    }
+                                });
+                    }
+                }
+
+                @Override
+                public void onCancelled(@NonNull DatabaseError error) {
+
+                }
+            });
+        } catch (Exception e) {
+            toastMessage(e.getMessage());
+        }
+    }
 
 
     private void addNewRow() {
@@ -251,7 +318,6 @@ public class Purchase_entry extends AppCompatActivity implements AdapterView.OnI
             productClassList.add(productClass);
 
             for (ProductClass pClass : productClassList) {
-                String name = pClass.getpName();
                 double initAmount = Double.parseDouble(productClass.getQuantity()) * Double.parseDouble(productClass.getpRate());
                 double initGst = initAmount*((Double.parseDouble(productClass.getpSgst()) + Double.parseDouble(productClass.getpCgst()))/100);
                 double val = Double.parseDouble(productClass.getpAmount());
@@ -266,8 +332,10 @@ public class Purchase_entry extends AppCompatActivity implements AdapterView.OnI
             totalAmount.setText(total);
             gstAmount.setText(gstTotal);
             fullAmount.setText(amount);
-            productAdapter.notifyDataSetChanged();
-            count++;
+            purchaseAdapter.notifyDataSetChanged();
+
+            quan.setText("");
+            rate.setText("");
 
         }
 
@@ -277,11 +345,27 @@ public class Purchase_entry extends AppCompatActivity implements AdapterView.OnI
     }
 
     private void createPdf() {
+        String Bill = billNo.getText().toString();
 
         try {
 
-            String pdfPath = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS).toString();
-            File file = new File(pdfPath, "sample.pdf");
+            String downloadsPath = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS).toString();
+            String vetrimuruganPath = downloadsPath + "/Vetrimurugan"+ "/Purchase_bill";
+
+            // Create directory if it doesn't exist
+            File vetrimuruganDir = new File(vetrimuruganPath);
+            if (!vetrimuruganDir.exists() ) {
+                if (vetrimuruganDir.mkdirs()) {
+                    System.out.println("Vetrimurugan directory created successfully.");
+                    toastMessage("Vetrimurugan directory created successfully.");
+                    toastMessage("Purchase Bill directory created successfully.");
+                } else {
+                    System.err.println("Failed to create Vetrimurugan directory.");
+                    return;
+                }
+            }
+
+            File file = new File(vetrimuruganPath, Bill+".pdf");
 
             Document document = new Document();
             PdfWriter.getInstance(document, new FileOutputStream(file));
@@ -357,13 +441,16 @@ public class Purchase_entry extends AppCompatActivity implements AdapterView.OnI
             e1.setBorder(Rectangle.NO_BORDER);
             PdfPCell e2 = new PdfPCell(new Phrase(""));
             e2.setBorder(Rectangle.NO_BORDER);
-            PdfPCell invoiceNum = new PdfPCell(new Phrase("Invoice No: "+1+"/23-24",FontFactory.getFont(FontFactory.TIMES_BOLD,12,BaseColor.BLACK)));
+
+            String Dates = String.valueOf(billDate.getText().toString());
+            PdfPCell invoiceNum = new PdfPCell(new Phrase("Invoice No: "+Bill +"/23-24",FontFactory.getFont(FontFactory.TIMES_BOLD,12,BaseColor.BLACK)));
             invoiceNum.setHorizontalAlignment(Element.ALIGN_RIGHT);
             invoiceNum.setBorder(Rectangle.NO_BORDER);
 
 
 
-            PdfPCell d = new PdfPCell(new Phrase("Date: "+"fdate"));
+
+            PdfPCell d = new PdfPCell(new Phrase("Date: "+Dates));
             d.setBorder(Rectangle.NO_BORDER);
             d.setHorizontalAlignment(Element.ALIGN_RIGHT);
 
@@ -677,7 +764,6 @@ public class Purchase_entry extends AppCompatActivity implements AdapterView.OnI
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 for(DataSnapshot products:snapshot.getChildren()){
                     product.add(products.child("pName").getValue().toString());
-
                 }
                 adapter.notifyDataSetChanged();
             }
@@ -690,28 +776,13 @@ public class Purchase_entry extends AppCompatActivity implements AdapterView.OnI
 
 
     }
-    @Override
-    public void onItemSelected(AdapterView<?> parent, View view, int position,
-                               long id) {
-        // On selecting a spinner item
-        String label = parent.getItemAtPosition(position).toString();
 
-        // Showing selected spinner item
-        Toast.makeText(parent.getContext(), "You selected: " + label,
-                Toast.LENGTH_LONG).show();
-
-    }
-
-
-
-    @Override
-    public void onNothingSelected(AdapterView<?> arg0) {
-        // TODO Auto-generated method stub
-
-    }
     public  void toastMessage(String message){
         Toast.makeText(this,message,Toast.LENGTH_SHORT).show();
     }
 
 
+    public void billSearch(View view) {
+        toastMessage("Sample");
+    }
 }

@@ -10,12 +10,12 @@
               <deviceKey>
                 <Key>
                   <type value="VIRTUAL_DEVICE_PATH" />
-                  <value value="C:\Users\Anish Kumar\.android\avd\Anish_Redmi_API_26.avd" />
+                  <value value="C:\Users\Anish Kumar\.android\avd\Anish_Redmi_HomeNetwork.avd" />
                 </Key>
               </deviceKey>
             </Target>
           </targetSelectedWithDropDown>
-          <timeTargetWasSelectedWithDropDown value="2024-03-04T04:36:36.737174800Z" />
+          <timeTargetWasSelectedWithDropDown value="2024-03-19T11:19:05.430893800Z" />
         </State>
       </entry>
     </value>
