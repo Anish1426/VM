@@ -450,4 +450,9 @@ public class Homepage extends AppCompatActivity {
         dialog = builder.create();
         dialog.show();
     }
+
+    public void salesBillReport(View view) {
+        startActivity(new Intent(Homepage.this,SalesReport.class));
+
+    }
 }

@@ -240,6 +240,7 @@
                     />
 
                 <Button
+                    android:onClick="salesBillReport"
                     android:layout_width="115dp"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="13dp"

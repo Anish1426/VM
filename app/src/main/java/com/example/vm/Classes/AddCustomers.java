@@ -50,4 +50,7 @@ public class AddCustomers {
         this.cusState = cusState;
         this.cusNumber = cusNumber;
     }
+
+    public AddCustomers() {
+    }
 }

@@ -1,6 +1,141 @@
 package com.example.vm.Classes;
 
 public class SalesClass {
+
+    String invoiceDate;
+    String invoiceNumber;
+    String partyName;
+    String customerGst;
+    String productName;
+    String hsnCode;
+    String salesQuantity;
+    String salesRate;
+    String sgstPercentage;
+    String cgstPercentage;
+    String sGst;
+
+    public SalesClass(String invoiceDate, String invoiceNumber, String partyName, String customerGst, String productName, String hsnCode, String salesQuantity, String salesRate, String sgstPercentage, String cgstPercentage, String sGst, String cGst, String amount) {
+        this.invoiceDate = invoiceDate;
+        this.invoiceNumber = invoiceNumber;
+        this.partyName = partyName;
+        this.customerGst = customerGst;
+        this.productName = productName;
+        this.hsnCode = hsnCode;
+        this.salesQuantity = salesQuantity;
+        this.salesRate = salesRate;
+        this.sgstPercentage = sgstPercentage;
+        this.cgstPercentage = cgstPercentage;
+        this.sGst = sGst;
+        this.cGst = cGst;
+        this.amount = amount;
+    }
+
+    public String getInvoiceDate() {
+        return invoiceDate;
+    }
+
+    public void setInvoiceDate(String invoiceDate) {
+        this.invoiceDate = invoiceDate;
+    }
+
+    public String getInvoiceNumber() {
+        return invoiceNumber;
+    }
+
+    public void setInvoiceNumber(String invoiceNumber) {
+        this.invoiceNumber = invoiceNumber;
+    }
+
+    public String getPartyName() {
+        return partyName;
+    }
+
+    public void setPartyName(String partyName) {
+        this.partyName = partyName;
+    }
+
+    public String getCustomerGst() {
+        return customerGst;
+    }
+
+    public void setCustomerGst(String customerGst) {
+        this.customerGst = customerGst;
+    }
+
+    public String getProductName() {
+        return productName;
+    }
+
+    public void setProductName(String productName) {
+        this.productName = productName;
+    }
+
+    public String getHsnCode() {
+        return hsnCode;
+    }
+
+    public void setHsnCode(String hsnCode) {
+        this.hsnCode = hsnCode;
+    }
+
+    public String getSalesQuantity() {
+        return salesQuantity;
+    }
+
+    public void setSalesQuantity(String salesQuantity) {
+        this.salesQuantity = salesQuantity;
+    }
+
+    public String getSalesRate() {
+        return salesRate;
+    }
+
+    public void setSalesRate(String salesRate) {
+        this.salesRate = salesRate;
+    }
+
+    public String getSgstPercentage() {
+        return sgstPercentage;
+    }
+
+    public void setSgstPercentage(String sgstPercentage) {
+        this.sgstPercentage = sgstPercentage;
+    }
+
+    public String getCgstPercentage() {
+        return cgstPercentage;
+    }
+
+    public void setCgstPercentage(String cgstPercentage) {
+        this.cgstPercentage = cgstPercentage;
+    }
+
+    public String getsGst() {
+        return sGst;
+    }
+
+    public void setsGst(String sGst) {
+        this.sGst = sGst;
+    }
+
+    public String getcGst() {
+        return cGst;
+    }
+
+    public void setcGst(String cGst) {
+        this.cGst = cGst;
+    }
+
+    public String getAmount() {
+        return amount;
+    }
+
+    public void setAmount(String amount) {
+        this.amount = amount;
+    }
+
+    String cGst;
+    String amount;
     String pCode;
     String pName;
     String pHsn;

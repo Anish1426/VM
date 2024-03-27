@@ -3,6 +3,7 @@ package com.example.vm;
 
 
 import android.Manifest;
+import android.app.DatePickerDialog;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.provider.ContactsContract;
@@ -12,6 +13,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
+import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Spinner;
@@ -25,7 +27,10 @@ import androidx.core.content.ContextCompat;
 
 import com.example.vm.Adapters.PurchaseAdapter;
 import com.example.vm.Adapters.SalesAdapter;
+import com.example.vm.Classes.AddCustomers;
+import com.example.vm.Classes.ProductClass;
 import com.example.vm.Classes.SalesClass;
+import com.example.vm.Classes.SalesReportClass;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.database.DataSnapshot;
@@ -34,14 +39,17 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 public class activity_sales_entry extends AppCompatActivity {
 
     Spinner to,productName;
-    EditText quantity,rate,sgstRate,cgstRate,billNo;
+    EditText quantity,rate,sgstRate,cgstRate,billNo,billDate;
     TextView hsnCode,intiAmount,gstAmount,fullAmount;
     CheckBox gst;
     ListView salesList;
@@ -58,6 +66,9 @@ public class activity_sales_entry extends AppCompatActivity {
     private static final int REQUEST_WRITE_EXTERNAL_STORAGE = 1;
     private int clickedRowPosition = -1;
 
+    String invoiceDate,invoiceNumber,partyName,customerGst,productNames,hsnCodes,
+    productQuantity,productRate,sgstPercentage,cgstPercentage,sGst,cGst,productAmount;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -66,6 +77,7 @@ public class activity_sales_entry extends AppCompatActivity {
         productReference = FirebaseDatabase.getInstance().getReference().child("product");
         customerReference = FirebaseDatabase.getInstance().getReference().child("addSeller");
         salesBillReference = FirebaseDatabase.getInstance().getReference().child("salesBill");
+
 
 
         to = findViewById(R.id.cpy_name);
@@ -81,6 +93,7 @@ public class activity_sales_entry extends AppCompatActivity {
         rate= findViewById(R.id.rate);
         sgstRate = findViewById(R.id.sgst);
         cgstRate=findViewById(R.id.cgst);
+        billDate = findViewById(R.id.billDate);
 
         salesList = findViewById(R.id.salesList);
         salesClassList = new ArrayList<>();
@@ -89,6 +102,35 @@ public class activity_sales_entry extends AppCompatActivity {
 
         generateBill = findViewById(R.id.generateBill);
 
+        SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
+        Date date1 = new Date();
+        String Date = dateFormat.format(date1);
+
+        billDate.setText(Date);
+
+        billDate.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Calendar calendar = Calendar.getInstance();
+                int year = calendar.get(Calendar.YEAR);
+                int month = calendar.get(Calendar.MONTH);
+                int dayOfMonth = calendar.get(Calendar.DAY_OF_MONTH);
+
+                // Create a new instance of DatePickerDialog
+                DatePickerDialog datePickerDialog = new DatePickerDialog(activity_sales_entry.this,
+                        new DatePickerDialog.OnDateSetListener() {
+                            @Override
+                            public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
+                                // Do something with the selected date
+                                String selectedDate = dayOfMonth + "/" + (monthOfYear + 1) + "/" + year;
+                                billDate.setText(selectedDate);
+                            }
+                        }, year, month, dayOfMonth);
+
+                // Show the DatePickerDialog
+                datePickerDialog.show();
+            }
+        });
         salesList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -133,18 +175,48 @@ public class activity_sales_entry extends AppCompatActivity {
     private void salesBillSave() {
         try {
             final String id = billNo.getText().toString();
+            customerReference.orderByChild("partyName").equalTo(to.getSelectedItem().toString()).addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot snapshot) {
+                    for(DataSnapshot dataSnapshot : snapshot.getChildren()){
+                        AddCustomers salesClass1 = dataSnapshot.getValue(AddCustomers.class);
+                        customerGst = salesClass1.getGstNo();
+                    }
+
+                }
+
+                @Override
+                public void onCancelled(@NonNull DatabaseError error) {
+
+                }
+            });
 
             // Check if the bill already exists in the database
             salesBillReference.child(id).removeValue().addOnSuccessListener(new OnSuccessListener<Void>() {
                 @Override
                 public void onSuccess(Void unused) {
+                    invoiceNumber = billNo.getText().toString();
+                    invoiceDate = billDate.getText().toString();
                     salesBillReference.child(id).addListenerForSingleValueEvent(new ValueEventListener() {
                         @Override
                         public void onDataChange(@NonNull DataSnapshot snapshot) {
                             for (int i = 0; i < salesClassList.size(); i++) {
                                 SalesClass salesClass = salesClassList.get(i);
+                                partyName = to.getSelectedItem().toString();
+                                productNames = salesClass.getProductName();
+                                hsnCodes =salesClass.getHsnCode();
+                                productQuantity =salesClass.getQuantity();
+                                productRate = salesClass.getpRate();
+                                sgstPercentage = salesClass.getpSgst();
+                                cgstPercentage =salesClass.getpSgst();
+                                sGst = salesClass.getpSgst();
+                                cGst = salesClass.getpCgst();
+                                productAmount = salesClass.getpAmount();
+
+                                SalesReportClass salesReportClass = new SalesReportClass(invoiceDate,invoiceNumber,partyName,customerGst,productNames,hsnCodes,productQuantity,productRate,sgstPercentage,cgstPercentage,sGst,cGst,productAmount);
+
                                 String productKey = salesBillReference.child(id).push().getKey();
-                                salesBillReference.child(id).child(productKey).setValue(salesClass)
+                                salesBillReference.child(id).child(productKey).setValue(salesReportClass)
                                         .addOnSuccessListener(new OnSuccessListener<Void>() {
                                             @Override
                                             public void onSuccess(Void unused) {
@@ -263,39 +335,22 @@ public class activity_sales_entry extends AppCompatActivity {
     }
 
         public void clear(View view) {
+            customerReference.orderByChild("partyName").equalTo(to.getSelectedItem().toString()).addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot snapshot) {
+                    for(DataSnapshot dataSnapshot : snapshot.getChildren()){
+                        AddCustomers salesClass1 = dataSnapshot.getValue(AddCustomers.class);
+                        String gst = salesClass1.getGstNo();
+                        toastMessage(gst);
+                    }
 
-        String bill = billNo.getText().toString();
-        String pName = productName.getSelectedItem().toString().trim();
-        String pHsn = hsnCode.getText().toString();
-        String quan = quantity.getText().toString();
-        String rate1 = rate.getText().toString();
-        double sgst = Double.parseDouble(cgstRate.getText().toString());
-        double cgst = Double.parseDouble(sgstRate.getText().toString());
-        String sg = String.valueOf(sgst);
-        String cg = String.valueOf(cgst);
+                }
 
-       SalesClass salesClass1 = new SalesClass("1",pName,pHsn,quan,rate1,sg,cg,"2000");
+                @Override
+                public void onCancelled(@NonNull DatabaseError error) {
 
-
-       salesBillReference.child(bill).setValue(salesClass1).addOnSuccessListener(new OnSuccessListener<Void>() {
-           @Override
-           public void onSuccess(Void unused) {
-               toastMessage("Updated Successfully");
-           }
-       })
-                       .addOnFailureListener(new OnFailureListener() {
-                           @Override
-                           public void onFailure(@NonNull Exception e) {
-                               toastMessage("Update failed");
-                           }
-                       });
-               salesClassList.clear();
-        salesAdapter.notifyDataSetChanged();
-    }
-
-    public void addRow(View view) {
-        addTableData(clickedRowPosition); // Pass the clicked row position to the addTableData() method
-        salesAdapter.notifyDataSetChanged();
+                }
+            });
     }
 
     private void addTableData(int clickedPosition) {
@@ -407,7 +462,6 @@ public class activity_sales_entry extends AppCompatActivity {
                             public void onDataChange(@NonNull DataSnapshot snapshot) {
                                 double initTotal=0,Total=0,TotalGst=0;
                                 for (DataSnapshot snapshot1 : snapshot.getChildren()){
-
                                     SalesClass salesClass1 = snapshot1.getValue(SalesClass.class);
                                     if(salesClass1 != null){
                                         salesClassList.add(salesClass1);
@@ -476,4 +530,7 @@ public class activity_sales_entry extends AppCompatActivity {
     }
 
 
+    public void addRow(View view) {
+        addTableData(clickedRowPosition);
+    }
 }
