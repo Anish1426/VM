@@ -41,9 +41,9 @@ public class SalesReportAdapter extends BaseAdapter {
     }
 
     @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
+    public View getView(int position, View view, ViewGroup parent) {
         LayoutInflater inflater = mContext.getLayoutInflater();
-        View view = inflater.inflate(R.layout.list_sales_report,null,true);
+        view = inflater.inflate(R.layout.list_sales_report,null,true);
 
         invoiceDate = view.findViewById(R.id.invoiceDate);
         invoiceNumber= view.findViewById(R.id.invoiceNumber);

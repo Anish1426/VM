@@ -1,7 +1,10 @@
 package com.example.vm;
 
 import android.os.Bundle;
+import android.provider.ContactsContract;
+import android.util.Log;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.annotation.NonNull;
@@ -39,17 +42,38 @@ public class SalesReport extends AppCompatActivity {
         salesReportClassList = new ArrayList<>();
 
 
-        salesReference = FirebaseDatabase.getInstance().getReference("salesBill");
+
+        salesReference = FirebaseDatabase.getInstance().getReference().child("salesBill");
 
         salesReference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                for(DataSnapshot dataSnapshot:snapshot.getChildren()){
-                    SalesReportClass salesReportClass = dataSnapshot.getValue(SalesReportClass.class);
-                    salesReportClassList.add(salesReportClass);
-                }
-                salesReportAdapter =new SalesReportAdapter(SalesReport.this,salesReportClassList);
-                salesList.setAdapter(salesReportAdapter);
+                salesReportClassList.clear();
+                    for(DataSnapshot snapshot1 : snapshot.getChildren()){
+
+                        String id = snapshot1.getKey();
+                        salesReference.child(id).addValueEventListener(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                                   for(DataSnapshot dataSnapshot : snapshot.getChildren()){
+
+                                        SalesReportClass salesReportClass = dataSnapshot.getValue(SalesReportClass.class);
+                                        salesReportClassList.add(salesReportClass);
+
+                                        String values = dataSnapshot.getValue().toString();
+                                       Log.d("Data",values);
+                                    }
+                                salesReportAdapter =new SalesReportAdapter(SalesReport.this,salesReportClassList);
+                                salesList.setAdapter(salesReportAdapter);
+                            }
+
+                            @Override
+                            public void onCancelled(@NonNull DatabaseError error) {
+
+                            }
+                        });
+                    }
+                Log.d("SalesReport", "Number of items: " + salesReportClassList.size());
             }
 
             @Override

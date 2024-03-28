@@ -203,8 +203,8 @@ public class activity_sales_entry extends AppCompatActivity {
                             for (int i = 0; i < salesClassList.size(); i++) {
                                 SalesClass salesClass = salesClassList.get(i);
                                 partyName = to.getSelectedItem().toString();
-                                productNames = salesClass.getProductName();
-                                hsnCodes =salesClass.getHsnCode();
+                                productNames = salesClass.getpName();
+                                hsnCodes =salesClass.getpHsn();
                                 productQuantity =salesClass.getQuantity();
                                 productRate = salesClass.getpRate();
                                 sgstPercentage = salesClass.getpSgst();
@@ -213,7 +213,7 @@ public class activity_sales_entry extends AppCompatActivity {
                                 cGst = salesClass.getpCgst();
                                 productAmount = salesClass.getpAmount();
 
-                                SalesReportClass salesReportClass = new SalesReportClass(invoiceDate,invoiceNumber,partyName,customerGst,productNames,hsnCodes,productQuantity,productRate,sgstPercentage,cgstPercentage,sGst,cGst,productAmount);
+                                SalesReportClass salesReportClass = new SalesReportClass(invoiceNumber,invoiceDate,partyName,customerGst,productNames,hsnCodes,productQuantity,productRate,sgstPercentage,cgstPercentage,sGst,cGst,productAmount);
 
                                 String productKey = salesBillReference.child(id).push().getKey();
                                 salesBillReference.child(id).child(productKey).setValue(salesReportClass)

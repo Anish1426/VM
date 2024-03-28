@@ -7,7 +7,7 @@ public class SalesReportClass {
     public SalesReportClass() {
     }
 
-    public SalesReportClass(String invoiceDate, String invoiceNumber, String partyName, String customerGst, String productName, String hsnCode, String quantity, String rate, String sgstPercentage, String cgstPercentage, String sGst, String cGst, String amount) {
+    public SalesReportClass(String invoiceNumber, String invoiceDate, String partyName, String customerGst, String productName, String hsnCode, String quantity, String rate, String sgstPercentage, String cgstPercentage, String sGst, String cGst, String amount) {
         this.invoiceDate = invoiceDate;
         this.invoiceNumber = invoiceNumber;
         this.partyName = partyName;
